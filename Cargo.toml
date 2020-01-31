@@ -1,0 +1,12 @@
+[package]
+name = "tokio-fd"
+version = "0.1.0"
+authors = ["nanpuyue <nanpuyue@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+libc = "0.2.66"
+mio = "0.6.21"
+tokio = { version = "0.2.11", features = ["io-driver"] }
