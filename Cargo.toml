@@ -3,8 +3,13 @@ name = "tokio-fd"
 version = "0.1.0"
 authors = ["nanpuyue <nanpuyue@gmail.com>"]
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "Non-blocking Read and Write a Linux File Descriptor"
+readme = "README.md"
+homepage = "https://github.com/nanpuyue/tokio-fd"
+repository = "https://github.com/nanpuyue/tokio-fd"
+license = "MIT OR Apache-2.0"
+categories = ["asynchronous", "os::unix-apis"]
+keywords = ["async", "fd", "io", "non-blocking", "tokio"]
 
 [dependencies]
 libc = "0.2.66"
