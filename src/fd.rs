@@ -1,8 +1,5 @@
 use std::io::{Error, Read, Result, Write};
-use std::os::unix::io::RawFd;
-
-use ::mio::unix::EventedFd;
-use ::mio::{Evented, Poll, PollOpt, Ready, Token};
+use std::os::unix::io::{AsRawFd, RawFd};
 
 pub(crate) struct Fd(pub RawFd);
 
@@ -46,16 +43,8 @@ impl Write for Fd {
     }
 }
 
-impl Evented for Fd {
-    fn register(&self, poll: &Poll, token: Token, interest: Ready, opts: PollOpt) -> Result<()> {
-        EventedFd(&self.0).register(poll, token, interest, opts)
-    }
-
-    fn reregister(&self, poll: &Poll, token: Token, interest: Ready, opts: PollOpt) -> Result<()> {
-        EventedFd(&self.0).reregister(poll, token, interest, opts)
-    }
-
-    fn deregister(&self, poll: &Poll) -> Result<()> {
-        EventedFd(&self.0).deregister(poll)
+impl AsRawFd for Fd {
+    fn as_raw_fd(&self) -> RawFd {
+        self.0
     }
 }
