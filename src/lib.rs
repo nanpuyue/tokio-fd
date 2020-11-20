@@ -29,55 +29,59 @@ impl AsyncRead for AsyncFd {
         cx: &mut Context<'_>,
         buf: &mut ReadBuf<'_>,
     ) -> Poll<Result<()>> {
-        let mut ready = match self.0.poll_read_ready(cx) {
-            Ready(x) => x?,
-            Pending => return Pending,
-        };
+        loop {
+            let mut ready = match self.0.poll_read_ready(cx) {
+                Ready(x) => x?,
+                Pending => return Pending,
+            };
 
-        let ret = unsafe {
-            libc::read(
-                self.as_raw_fd(),
-                buf.unfilled_mut() as *mut _ as _,
-                buf.remaining(),
-            )
-        };
+            let ret = unsafe {
+                libc::read(
+                    self.as_raw_fd(),
+                    buf.unfilled_mut() as *mut _ as _,
+                    buf.remaining(),
+                )
+            };
 
-        if ret < 0 {
-            let e = Error::last_os_error();
-            if e.kind() == ErrorKind::WouldBlock {
-                ready.clear_ready();
-                Pending
+            return if ret < 0 {
+                let e = Error::last_os_error();
+                if e.kind() == ErrorKind::WouldBlock {
+                    ready.clear_ready();
+                    continue;
+                } else {
+                    Ready(Err(e))
+                }
             } else {
-                Ready(Err(e))
-            }
-        } else {
-            let n = ret as usize;
-            unsafe { buf.assume_init(n) };
-            buf.advance(n);
-            Ready(Ok(()))
+                let n = ret as usize;
+                unsafe { buf.assume_init(n) };
+                buf.advance(n);
+                Ready(Ok(()))
+            };
         }
     }
 }
 
 impl AsyncWrite for AsyncFd {
     fn poll_write(self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &[u8]) -> Poll<Result<usize>> {
-        let mut ready = match self.0.poll_write_ready(cx) {
-            Ready(x) => x?,
-            Pending => return Pending,
-        };
+        loop {
+            let mut ready = match self.0.poll_write_ready(cx) {
+                Ready(x) => x?,
+                Pending => return Pending,
+            };
 
-        let ret = unsafe { libc::write(self.as_raw_fd(), buf.as_ptr() as _, buf.len()) };
+            let ret = unsafe { libc::write(self.as_raw_fd(), buf.as_ptr() as _, buf.len()) };
 
-        if ret < 0 {
-            let e = Error::last_os_error();
-            if e.kind() == ErrorKind::WouldBlock {
-                ready.clear_ready();
-                Pending
+            return if ret < 0 {
+                let e = Error::last_os_error();
+                if e.kind() == ErrorKind::WouldBlock {
+                    ready.clear_ready();
+                    continue;
+                } else {
+                    Ready(Err(e))
+                }
             } else {
-                Ready(Err(e))
-            }
-        } else {
-            Ready(Ok(ret as usize))
+                Ready(Ok(ret as usize))
+            };
         }
     }
 

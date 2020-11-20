@@ -1,6 +1,6 @@
 [package]
 name = "tokio-fd"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["nanpuyue <nanpuyue@gmail.com>"]
 edition = "2018"
 description = "Non-blocking Read and Write a Linux File Descriptor"
