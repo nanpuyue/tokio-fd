@@ -1,6 +1,6 @@
 [package]
 name = "tokio-fd"
-version = "0.2.1"
+version = "0.3.0"
 authors = ["nanpuyue <nanpuyue@gmail.com>"]
 edition = "2018"
 description = "Non-blocking Read and Write a Linux File Descriptor"
@@ -12,5 +12,5 @@ categories = ["asynchronous", "os::unix-apis"]
 keywords = ["async", "fd", "io", "non-blocking", "tokio"]
 
 [dependencies]
-libc = "0.2.80"
-tokio = { version = "0.3.4", features = ["net"] }
+libc = "0.2.81"
+tokio = { version = "1.0.1", features = ["net"] }
