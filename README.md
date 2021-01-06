@@ -1,6 +1,8 @@
-# Non-blocking Read and Write a Linux File Descriptor
+# Non-blocking Read and Write a Linux/Unix File Descriptor
 
-## example
+[![Crates.io](https://img.shields.io/crates/v/tokio-fd?color=green)](https://crates.io/crates/tokio-fd)
+
+## Example
 
 ```rust
 use std::convert::TryFrom;
@@ -21,3 +23,12 @@ async fn main() -> Result<()> {
     Ok(())
 }
 ```
+
+## License
+
+This project is licensed under either of
+
+* [Apache License, Version 2.0](https://github.com/nanpuyue/tokio-fd/blob/master/LICENSE-APACHE)
+* [MIT License](https://github.com/nanpuyue/tokio-fd/blob/master/LICENSE-MIT)
+
+at your option.
